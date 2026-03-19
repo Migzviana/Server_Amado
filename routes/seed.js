@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
+const { PrismaClient} = require("@prisma/client")
+
+const prisma = new PrismaClient();
 
 router.get("/seed", async (req, res) => {
   try {
@@ -10,7 +13,6 @@ router.get("/seed", async (req, res) => {
       data: {},
     });
 
-    // cria usuários
     const user1 = await prisma.user.create({
       data: {
         name: "Miguel",
