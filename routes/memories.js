@@ -67,3 +67,5 @@ router.post("/memories", auth, upload.single("image"), async (req, res) => {
     res.status(500).json({ error: "Erro ao criar memória" });
   }
 });
+
+module.exports = router;
