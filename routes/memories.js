@@ -51,6 +51,31 @@ router.post("/memories", auth, upload.single("image"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
+    router.get("/memories/:month", auth, async (req, res) => {
+      try {
+        const month = parseInt(req.params.month);
+
+        const user = await prisma.user.findUnique({
+          where: { id: req.user.id },
+        });
+
+        const memories = await prisma.memory.findMany({
+          where: {
+            month,
+            coupleId: user.coupleId,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        res.json(memories);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erro ao buscar memórias" });
+      }
+    });
+
     const memory = await prisma.memory.create({
       data: {
         message: text || "",
